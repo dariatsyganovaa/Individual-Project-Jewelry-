@@ -1,7 +1,7 @@
 #include <iostream>
 #include "date.h"
 #include "FIO.h"
-#include "time.h"
+#include "ctime.h"
 #include "docs.h"
 
 int main() {

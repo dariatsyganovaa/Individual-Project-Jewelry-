@@ -11,7 +11,7 @@ public:
 	Time();
 	Time(int hours, int mins, int seconds);
 	Time(const Time& time);
-	Time(std::string time);
+	/*Time(std::string time);
 
 	Status check();
 	Status convert();
@@ -25,6 +25,6 @@ public:
 	int compare(const Time& time);
 
 	Status input();
-	Status output();
+	Status output();*/
 
 };

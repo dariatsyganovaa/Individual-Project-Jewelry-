@@ -1,8 +1,6 @@
 #include <iostream>
 #include <stdexcept>
-#include "../Time/time.h"
-
-Time::Time() : _hours(0), _mins(0), _seconds(0) {}
+#include "../Time/ctime.h"
 
 Time::Time() {
     _hours = 0;
