@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ed81affe-90b2-4592-9fdb-2b5ab10b15b5}</ProjectGuid>
-    <RootNamespace>TestApplication</RootNamespace>
+    <ProjectGuid>{e0cc9379-1c05-4d36-a983-9a3330d69f0c}</ProjectGuid>
+    <RootNamespace>TVector</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -104,16 +104,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\TVector;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\Document;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\Time;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\FIO;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\Date;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\TVector;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\Document;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\Time;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\FIO;C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\Date;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>C:\GitHub\Individual-Project-Jewelry-\Jewelry_store\Date;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -132,24 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="tvector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Date\Date.vcxproj">
-      <Project>{09bf9ce7-eea1-4fd2-8c82-e6a719915671}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Document\Document.vcxproj">
-      <Project>{de20bdf7-0198-4161-bffc-d38e779be0ec}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\FIO\FIO.vcxproj">
-      <Project>{49d6b9ac-8a6d-45ad-9f4e-4e08f4b57acb}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Time\Time.vcxproj">
-      <Project>{796f5070-8eae-4df1-8b86-9d5e5c675ff9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\TVector\TVector.vcxproj">
-      <Project>{e0cc9379-1c05-4d36-a983-9a3330d69f0c}</Project>
-    </ProjectReference>
+    <ClInclude Include="tvector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
