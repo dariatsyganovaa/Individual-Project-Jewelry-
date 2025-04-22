@@ -39,9 +39,13 @@ public:
 	inline T* begin() noexcept;
 	inline T* end() noexcept;
 
-	inline T* data() noexcept; // сеттер
+	//inline T* data() noexcept; // сеттер
 	inline const T* data() const noexcept; // геттер
 	/* ... */
+
+	void push_front_elem(const T&);
+	void push_back_elem(const T&);
+	void insert_elem(const T&, size_t);
 private:
 	inline bool is_full() const noexcept;
 	/* ... */
@@ -122,8 +126,8 @@ TVector<T>::~TVector() {
 	delete[] _states;
 }
 
-template<class T>
-inline T* TVector<T>::data() noexcept { return _data; }
+//template<class T>
+//inline T* TVector<T>::data() noexcept { return _data; }
 
 template<class T>
 inline const T* TVector<T>::data() const noexcept {	return _data; }
@@ -141,7 +145,11 @@ inline T& TVector<T>::front() noexcept {
 
 template<class T>
 inline T& TVector<T>::back() noexcept {
-	return _data[_size - 1];
+	for (size_t i = _size; i > 0; --i) {
+		if (_states[i - 1] == busy) {
+			return _data[i - 1];
+		}
+	}
 }
 
 template<class T>
@@ -165,7 +173,7 @@ inline bool TVector<T>::is_empty() const noexcept {
 	}
 	else if (_size > 0) {
 		for (size_t i = 0; i < _capacity; i++) {
-			if (_states[i] != empty) {
+			if (_states[i] == busy) {
 				return 0;
 			}
 		}
@@ -173,5 +181,40 @@ inline bool TVector<T>::is_empty() const noexcept {
 	return 1;
 }
 
+//вставка 
+template<class T>
+void TVector<T>::push_front_elem(const T& value) {
+	for (size_t i = _size; i > 0; --i) {
+		_data[i] = _data[i - 1];
+		_states[i] = _states[i - 1];
+	}
 
+	_data[0] = value;
+	_states[0] = busy;
 
+	++_size;
+}
+
+template<class T>
+void TVector<T>::push_back_elem(const T& value) {
+	if (_size > 0 && _states[_size - 1] != busy) {
+		throw std::logic_error("Cannot push_back: last element must be in 'busy' state!");
+	}
+	_data[_size] = value;
+	_states[_size] = busy;
+
+	++_size;
+}
+
+template<class T>
+void TVector<T>::insert_elem(const T& value, size_t pos) {  
+	//нужна проверка состояний
+	for (size_t i = _size - 1; i > pos; i--) {
+		_data[i] = _data[i - 1];
+		_states[i] = _states[i - 1];
+	}
+	_data[pos] = value;
+	_states[pos] = busy;
+
+	++_size;
+}

@@ -25,10 +25,15 @@ int main() {
     std::cout << " - Size: " << vec3.size() << "\n";
     std::cout << " - Is empty? " << (vec3.is_empty() ? "Yes" : "No") << "\n\n";
 
-    std::cout << " The element at the beginning - " << vec3.front() << "\n";
-    std::cout << " The element at the end - " << vec3.back() << "\n";
+    vec2.push_front_elem(3);
+    std::cout << " The element at the end - " << vec2.back() << "\n";
     std::cout << " address data " << vec3.begin() << "\n";
     std::cout << " address data " << vec3.end() << "\n";
+
+    std::cout << " data mass " << vec3.data() << "\n";
+    vec3.push_front_elem(3);
+    std::cout << " The element at the beginning - " << vec2.front() << "\n";
+    
 	system("pause");
 	return 0;
 }
