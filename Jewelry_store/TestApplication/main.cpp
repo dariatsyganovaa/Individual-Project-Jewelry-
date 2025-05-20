@@ -18,9 +18,9 @@ int main() {
     std::cout << " - Size: " << vec2.size() << "\n";
     std::cout << " - Is empty? " << (vec2.is_empty() ? "Yes" : "No") << "\n\n";
 
-    int arr[14] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-    TVector<int> vec3(arr, 14);
-    std::cout << "vec3 (size constructor = 14):\n";
+    int arr[9] = {6, 2, 6, 4, 5, 6, 7, 6, 9};
+    TVector<int> vec3(arr, 9);
+    std::cout << "vec3 (size constructor = 9):\n";
     std::cout << " - Capacity: " << vec3.capacity() << "\n";
     std::cout << " - Size: " << vec3.size() << "\n";
     std::cout << " - Is empty? " << (vec3.is_empty() ? "Yes" : "No") << "\n\n";
@@ -36,14 +36,21 @@ int main() {
     std::cout << " The element at the end - " << vec3.back() << "\n";
 
     vec3.print_elems();
-    
-    vec3.push_back_elem(505);
-    vec3.erase_elem(5);
-    vec3.insert_elem(544, 7);
-    //vec3.push_front_elem(455);
+    //vec3.push_back_elem(505);
+    //vec3.insert_elem(6, 3);
+    //vec3.push_front_elem(1);
+    vec3.erase_elem(4);
+    vec3.erase_elem(4);
+
+    int first = find_first_elem(vec3, 6);
+    // Поиск последнего вхождения
+    int last = find_last_elem(vec3, 6);
     
     vec3.print_elems();
     vec3.print_states();
+    
+    
+
 	system("pause");
 	return 0;
 }
