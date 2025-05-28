@@ -197,162 +197,21 @@ bool test_14_end_empty_vector() {
     TVector<int> empty_vec;
     return TestSystem::check(empty_vec.end(), empty_vec.begin());
 }
-bool test_t_assign() {
+bool test_15_push_front_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec(arr, 14);
-    vec.assign(4, 444);
-    int expected_res[4] = { 444, 444, 444, 444 };
-    for (size_t i = 0; i < 4; i++) {
-        if (vec[i] != expected_res[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool test_t_assign_in_empty_vec() {
-    TVector<int> vec;
-    vec.assign(4, 444);
-    int expected_res[4] = { 444, 444, 444, 444 };
-    for (size_t i = 0; i < 4; i++) {
-        if (vec[i] != expected_res[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool test_assign_zero_count() {
-    TVector<int> vec;
-    vec.assign(0, 42);
-    return vec.size() == 0 && vec.capacity() == 0;
-}
-
-bool test_assign_large_count() {
-    TVector<int> vec;
-    int huge = 1000000; // либо size_t
-    vec.assign(huge, 42);
-
-    if (vec.size() != huge) {
-        return false;
-    }
-
-    for (size_t i = 0; i < huge; i += 1000) { // проверяем с шагом 1000 чтобы не занимало много времени
-        if (vec[i] != 42) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool test_repeated_assign() {
-    TVector<int> vec;
-    vec.assign(10, 1);
-    vec.assign(5, 2);
-
-    if (vec.size() != 5) {
-        return false;
-    }
-
-    for (size_t i = 0; i < 5; ++i) {
-        if (vec[i] != 2) {
-            return false;
-        }
-    }
-    return true;
-}
-bool test_n_push_front_elem() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    int expected_result[15] = { 4, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    int expected_result[15] = { 111, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 15);
-    vec1.push_front_elem(4);
+    vec1.push_front_elem(111);
 
     if (vec1.size() != 15) {
         return false;
     }
-
     if (vec1 != vec2) {
         return false;
     }
     return true;
 }
-
-bool test_n_push_back_elem() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    int expected_result[15] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 4 };
-    TVector<int> vec1(arr, 14), vec2(expected_result, 15);
-    vec1.push_back_elem(4);
-
-    if (vec1.size() != 15) {
-        return false;
-    }
-
-    if (vec1 != vec2) {
-        return false;
-    }
-    return true;
-
-}
-
-bool test_n_insert_elem() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    int expected_result[15] = { 1, 2, 999, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14), vec2(expected_result, 15);
-    vec1.insert_elem(999, 3);
-
-    if (vec1.size() != 15) {
-        return false;
-    }
-
-    if (vec1 != vec2) {
-        return false;
-    }
-    return true;
-}
-bool test_n_push_front_elem_in_empty_mass() {
-    int expected_result[1] = { 1 };
-    TVector<int> vec1, vec2(expected_result, 1);
-    vec1.push_front_elem(1);
-
-    if (vec1.size() != 1) {
-        return false;
-    }
-
-    if (vec1 != vec2) {
-        return false;
-    }
-
-    return true;
-}
-bool test_n_push_back_elem_in_empty_mass() {
-    int expected_result[1] = { 1 };
-    TVector<int> vec1, vec2(expected_result, 1);
-    vec1.push_back_elem(1);
-
-    if (vec1.size() != 1) {
-        return false;
-    }
-
-    if (vec1 != vec2) {
-        return false;
-    }
-
-    return true;
-}
-bool test_n_insert_elem_in_empty_mass() {
-    TVector<int> vec1;
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        vec1.insert_elem(555, 1);
-    }
-
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-    return TestSystem::check(expected_result, actual_result);
-}
-bool test_n_push_front_elems() {
+bool test_16_push_front_elems() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result[18] = { 555, 666, 777, 888, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int mass[4] = { 555, 666, 777, 888 };
@@ -362,56 +221,83 @@ bool test_n_push_front_elems() {
     if (vec1.size() != 18) {
         return false;
     }
-
-
     if (vec1 != vec2) {
         return false;
-
     }
-
     return true;
 }
-
-bool test_n2_push_back_elems() {
+bool test_17_push_back_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    int expected_result[18] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 555, 666, 777, 888 };
+    int expected_result[15] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 111 };
+    TVector<int> vec1(arr, 14), vec2(expected_result, 15);
+    vec1.push_back_elem(111);
+
+    if (vec1.size() != 15) {
+        return false;
+    }
+    if (vec1 != vec2) {
+        return false;
+    }
+    return true;
+}
+bool test_18_push_back_elems() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int mass[4] = { 555, 666, 777, 888 };
+    int expected_result[18] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 555, 666, 777, 888 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 18);
     vec1.push_back_elems(mass, 4);
 
     if (vec1.size() != 18) {
         return false;
     }
-
-
     if (vec1 != vec2) {
         return false;
-
     }
-
     return true;
 }
-
-bool test_n3_insert_elems() {
+bool test_19_insert_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    int expected_result[18] = { 1, 2, 3, 4, 5, 555, 666, 777, 888, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    int expected_result[15] = { 1, 2, 111, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14), vec2(expected_result, 15);
+    vec1.insert_elem(111, 3);
+
+    if (vec1.size() != 15) {
+        return false;
+    }
+    if (vec1 != vec2) {
+        return false;
+    }
+    return true;
+}
+bool test_20_insert_elems() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int mass[4] = { 555, 666, 777, 888 };
+    int expected_result[18] = { 1, 2, 555, 666, 777, 888, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 18);
-    vec1.insert_elems(6, mass, 4);
+    vec1.insert_elems(3, mass, 4);
 
     if (vec1.size() != 18) {
         return false;
     }
-
-
     if (vec1 != vec2) {
         return false;
-
     }
-
     return true;
 }
-bool test_n_push_front_elems_in_empty_mass() {
+bool test_21_push_front_elem_in_empty_vec() {
+    int expected_result[1] = { 111 };
+    TVector<int> vec1, vec2(expected_result, 1);
+    vec1.push_front_elem(111);
+
+    if (vec1.size() != 1) {
+        return false;
+    }
+    if (vec1 != vec2) {
+        return false;
+    }
+    return true;
+}
+bool test_22_push_front_elems_in_empty_vec() {
     int expected_result[4] = { 555, 666, 777, 888 };
     int mass[4] = { 555, 666, 777, 888 };
     TVector<int> vec1, vec2(expected_result, 4);
@@ -420,15 +306,25 @@ bool test_n_push_front_elems_in_empty_mass() {
     if (vec1.size() != 4) {
         return false;
     }
-
     if (vec1 != vec2) {
         return false;
     }
-
-
     return true;
 }
-bool test_n_push_back_elems_in_empty_mass() {
+bool test_23_push_back_elem_in_empty_vec() {
+    int expected_result[1] = { 111 };
+    TVector<int> vec1, vec2(expected_result, 1);
+    vec1.push_back_elem(111);
+
+    if (vec1.size() != 1) {
+        return false;
+    }
+    if (vec1 != vec2) {
+        return false;
+    }
+    return true;
+}
+bool test_24_push_back_elems_in_empty_vec() {
     int expected_result[4] = { 555, 666, 777, 888 };
     int mass[4] = { 555, 666, 777, 888 };
     TVector<int> vec1, vec2(expected_result, 4);
@@ -437,16 +333,24 @@ bool test_n_push_back_elems_in_empty_mass() {
     if (vec1.size() != 4) {
         return false;
     }
-
     if (vec1 != vec2) {
         return false;
     }
-
-
     return true;
 }
-
-bool test_n_insert_elems_in_empty_mass() {
+bool test_25_insert_elem_in_empty_vec() {
+    TVector<int> vec1;
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.insert_elem(555, 1);
+    }
+    catch (const std::exception& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_26_insert_elems_in_empty_vec() {
     TVector<int> vec1;
     int mass[4] = { 555, 666, 777, 888 };
     bool expected_result = true;
@@ -454,45 +358,39 @@ bool test_n_insert_elems_in_empty_mass() {
     try {
         vec1.insert_elems(1, mass, 4);
     }
-
     catch (const std::exception& ex) {
         actual_result = true;
     }
     return TestSystem::check(expected_result, actual_result);
 }
-
-bool test_n3_insert_elem_error() {
+bool test_27_insert_elem_pos_out_of_range() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     bool expected_result = true;
     bool actual_result = false;
     try {
-        vec1.insert_elem(5, 16);
+        vec1.insert_elem(555, 16);
     }
-
     catch (const std::exception& ex) {
         actual_result = true;
     }
     return TestSystem::check(expected_result, actual_result);
 }
-bool test_n3_insert_elems_error() {
+bool test_28_insert_elems_pos_out_of_range() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     int mass[4] = { 555, 666, 777, 888 };
-
     bool expected_result = true;
     bool actual_result = false;
     try {
         vec1.insert_elems(18, mass, 4);
     }
-
     catch (const std::exception& ex) {
         actual_result = true;
     }
     return TestSystem::check(expected_result, actual_result);
 }
-
-bool test_n_pop_front_elem() {
+bool test_29_pop_front_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     vec1.pop_front_elem();
@@ -501,64 +399,14 @@ bool test_n_pop_front_elem() {
     if (vec1.size() != 13) {
         return false;
     }
-
     for (size_t i = 0; i < 14; i++) {
-        std::cout << vec1.states()[i] << " ";
-    }
-    std::cout << std::endl;
-
-    for (int i = 0; i < 14; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
         }
     }
     return true;
 }
-bool test_n_pop_back_elem() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    vec1.pop_back_elem();
-    int expected_result[14] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 };
-
-    if (vec1.size() != 13) {
-        return false;
-    }
-
-    for (size_t i = 0; i < 14; i++) {
-        std::cout << vec1.states()[i] << " ";
-    }
-    std::cout << std::endl;
-
-    for (int i = 0; i < 14; i++) {
-        if (vec1.states()[i] != expected_result[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-bool test_n_erase_elem() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    vec1.erase_elem(4);
-    int expected_result[14] = { 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-
-    if (vec1.size() != 13) {
-        return false;
-    }
-
-    for (size_t i = 0; i < 14; i++) {
-        std::cout << vec1.states()[i] << " ";
-    }
-    std::cout << std::endl;
-
-    for (int i = 0; i < 14; i++) {
-        if (vec1.states()[i] != expected_result[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-bool test_n_pop_front_elems() {
+bool test_30_pop_front_elems() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     vec1.pop_front_elems(2);
@@ -567,66 +415,14 @@ bool test_n_pop_front_elems() {
     if (vec1.size() != 12) {
         return false;
     }
-
     for (size_t i = 0; i < 14; i++) {
-        std::cout << vec1.states()[i] << " ";
-    }
-    std::cout << std::endl;
-
-    for (int i = 0; i < 14; i++) {
-        if (vec1.states()[i] != expected_result[i]) {
-            return false;
-        }
-    }
-    return true;
-
-}
-bool test_n_pop_back_elems() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    vec1.pop_back_elems(2);
-    int expected_result[14] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 };
-
-    if (vec1.size() != 12) {
-        return false;
-    }
-
-    for (size_t i = 0; i < 14; i++) {
-        std::cout << vec1.states()[i] << " ";
-    }
-    std::cout << std::endl;
-
-    for (int i = 0; i < 14; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
         }
     }
     return true;
 }
-bool test_n_erase_elems() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    vec1.erase_elems(4, 2);
-    int expected_result[14] = { 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-
-    if (vec1.size() != 12) {
-        return false;
-    }
-
-    for (size_t i = 0; i < 14; i++) {
-        std::cout << vec1.states()[i] << " ";
-    }
-    std::cout << std::endl;
-
-    for (int i = 0; i < 14; i++) {
-        if (vec1.states()[i] != expected_result[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool test_n_pop_front_elem_in_empty_mass() {
+bool test_31_pop_front_elem_in_empty_vec() {
     TVector<int> vec1;
     bool expected_result = true;
     bool actual_result = false;
@@ -636,10 +432,66 @@ bool test_n_pop_front_elem_in_empty_mass() {
     catch (const std::exception& ex) {
         actual_result = true;
     }
-
     return TestSystem::check(expected_result, actual_result);
 }
-bool test_n_pop_back_elem_in_empty_mass() {
+bool test_32_pop_front_elems_in_empty_vec() {
+    TVector<int> vec1;
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.pop_front_elems(1);
+    }
+    catch (const std::exception& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_33_pop_front_elems_count_out_of_range() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.pop_front_elems(16);
+    }
+    catch (const std::exception& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_34_pop_back_elem() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.pop_back_elem();
+    int expected_result[14] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 };
+
+    if (vec1.size() != 13) {
+        return false;
+    }
+    for (size_t i = 0; i < 14; i++) {
+        if (vec1.states()[i] != expected_result[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_35_pop_back_elems() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.pop_back_elems(5);
+    int expected_result[14] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
+
+    if (vec1.size() != 9) {
+        return false;
+    }
+    for (size_t i = 0; i < 14; i++) {
+        if (vec1.states()[i] != expected_result[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_36_pop_back_elem_in_empty_vec() {
     TVector<int> vec1;
     bool expected_result = true;
     bool actual_result = false;
@@ -649,54 +501,9 @@ bool test_n_pop_back_elem_in_empty_mass() {
     catch (const std::exception& ex) {
         actual_result = true;
     }
-
     return TestSystem::check(expected_result, actual_result);
 }
-bool test_n_erase_elem_in_empty_mass() {
-    TVector<int> vec1;
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        vec1.erase_elem(4);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
-}
-
-bool test_n_erase_elem_error() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        vec1.erase_elem(15);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
-}
-
-
-bool test_n_pop_front_elems_in_empty_mass() {
-    TVector<int> vec1;
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        vec1.pop_front_elems(2);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
-}
-bool test_n_pop_back_elems_in_empty_mass() {
+bool test_37_pop_back_elems_in_empty_vec() {
     TVector<int> vec1;
     bool expected_result = true;
     bool actual_result = false;
@@ -709,7 +516,75 @@ bool test_n_pop_back_elems_in_empty_mass() {
 
     return TestSystem::check(expected_result, actual_result);
 }
-bool test_n_erase_elems_in_empty_mass() {
+bool test_38_pop_back_elems_count_out_of_range() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.pop_back_elems(16);
+    }
+    catch (const std::exception& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_39_erase_elem() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.erase_elem(4);
+    int expected_result[14] = { 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+    if (vec1.size() != 13) {
+        return false;
+    }
+    for (size_t i = 0; i < 14; i++) {
+        if (vec1.states()[i] != expected_result[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_40_erase_elems() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+
+    vec1.erase_elems(4, 4);
+    int mass[14] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0 }; //перевыделение памяти
+    if (vec1.size() != 10) {
+        return false;
+    }
+    vec1.erase_elems(4, 2);
+    int expected_result[14] = { 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0 };
+    if (vec1.size() != 8) {
+        return false;
+    }
+
+    /*for (size_t i = 0; i < 14; i++) {
+        std::cout << vec1.states()[i] << " ";
+    }
+    std::cout << std::endl;*/
+
+    for (size_t i = 0; i < 14; i++) {
+        if (vec1.states()[i] != expected_result[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_41_erase_elem_in_empty_vec() {
+    TVector<int> vec1;
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.erase_elem(4);
+    }
+    catch (const std::exception& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_42_erase_elems_in_empty_vec() {
     TVector<int> vec1;
     bool expected_result = true;
     bool actual_result = false;
@@ -719,18 +594,16 @@ bool test_n_erase_elems_in_empty_mass() {
     catch (const std::exception& ex) {
         actual_result = true;
     }
-
     return TestSystem::check(expected_result, actual_result);
 }
-
-bool test_n_pop_front_elems_error() {
+bool test_43_erase_elem_pos_out_of_range() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
 
     bool expected_result = true;
     bool actual_result = false;
     try {
-        vec1.pop_front_elems(15);
+        vec1.erase_elem(16);
     }
     catch (const std::exception& ex) {
         actual_result = true;
@@ -738,41 +611,7 @@ bool test_n_pop_front_elems_error() {
 
     return TestSystem::check(expected_result, actual_result);
 }
-
-bool test_n_pop_back_elems_error() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        vec1.pop_back_elems(15);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
-}
-
-
-bool test_n_erase_elems_error() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-
-    bool expected_result = true;
-    bool actual_result = false;
-    try {
-        vec1.erase_elems(4, 15);
-    }
-    catch (const std::exception& ex) {
-        actual_result = true;
-    }
-
-    return TestSystem::check(expected_result, actual_result);
-}
-
-bool test_n_erase_elems_pos_out_of_range() {
+bool test_44_erase_elems_pos_out_of_range() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
 
@@ -787,51 +626,383 @@ bool test_n_erase_elems_pos_out_of_range() {
 
     return TestSystem::check(expected_result, actual_result);
 }
-bool test_k_find_first_elem() {
+bool test_45_emplace() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.emplace(6, 111);
+    int expected_res[14] = { 1, 2, 3, 4, 5, 111, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec2(expected_res, 14);
+
+    if (vec1 != vec2) {
+        return false;
+    }
+    return true;
+}
+bool test_46_emplace_in_empty_vec() {
+    TVector<int> vec1;
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.emplace(1, 111);
+    }
+    catch (const std::out_of_range& ex) {
+        actual_result = true;
+    }
+    return true;
+}
+bool test_47_emplace_pos_out_of_range() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.emplace(15, 111);
+    }
+    catch (const std::out_of_range& ex) {
+        actual_result = true;
+    }
+    return true;
+}
+bool test_48_emplace_not_busy() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.pop_front_elem();
+    vec1.emplace(1, 111);
+    int mass[13] = { 111, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec2(mass, 13);
+    vec1.print_elems();
+    bool expected_res = true;
+    bool actual_res = (vec1 == vec2);
+    return TestSystem::check(expected_res, actual_res);
+}
+bool test_49_assign() {
+    TVector<int> vec1(40);
+    vec1.assign(4, 111);
+    int expected_res[4] = { 111, 111, 111, 111 };
+    for (size_t i = 0; i < 4; i++) {
+        if (vec1[i] != expected_res[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_50_assign_in_empty_vec() {
+    TVector<int> vec1; 
+    vec1.assign(4, 111);
+    int expected_res[4] = { 111, 111, 111, 111 };
+    for (size_t i = 0; i < 4; i++) {
+        if (vec1[i] != expected_res[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_51_assign_with_null_size() {
+    TVector<int> vec1(20);
+    vec1.assign(0, 111);
+
+    if (vec1.size() != 0) {
+        return false;
+    }
+    if (vec1.capacity() != 0) {
+        return false;
+    }
+    return true;
+}
+
+bool test_52_assign_to_large_vec() {
+    TVector<int> vec1;
+    vec1.assign(1000000, 42);
+
+    if (vec1.size() != 1000000) {
+        return false;
+    }
+    for (size_t i = 0; i < 1000000; i += 1000) {
+        if (vec1[i] != 42) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_53_repeat_assign() {
+    TVector<int> vec1(5);
+    vec1.assign(10, 222);
+    vec1.assign(4, 111);
+
+    if (vec1.size() != 4) {
+        return false;
+    }
+    int expected_res[4] = { 111, 111, 111, 111 };
+    for (size_t i = 0; i < 4; i++) {
+        if (vec1[i] != expected_res[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_54_at() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    int expected_res = 1;
+    int actual_res = vec1.at(0);
+    return TestSystem::check(actual_res, expected_res);
+}
+bool test_55_at_index_out_of_range() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.at(15);
+    }
+    catch (const std::out_of_range& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_56_at_with_an_invalid_elem() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.erase_elems(5, 10);
+
+    /*for (size_t i = 0; i < 14; i++) {
+        std::cout << vec1.states()[i] << " ";
+    }
+    std::cout << std::endl;*/
+
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.at(9);
+    }
+    catch (const std::logic_error& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_57_at_in_empty_vec() {
+    TVector<int> vec1;
+    bool expected_result = true;
+    bool actual_result = false;
+    try {
+        vec1.at(0);
+    }
+    catch (const std::out_of_range& ex) {
+        actual_result = true;
+    }
+    return TestSystem::check(expected_result, actual_result);
+}
+bool test_58_clear() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.pop_front_elems(2);
+    vec1.clear();
+    if (vec1.size() != 0) {
+        return false;
+    }
+    if (vec1.capacity() != 0) {
+        return false;
+    }
+    return true;
+}
+bool test_59_shrink_to_fit() {
+    TVector<int> vec1(16);
+    vec1.resize(7);
+    vec1.shrink_to_fit();
+    if (vec1.capacity() != 7) {
+        return false;
+    }   
+    return true;
+}
+bool test_60_shrink_to_fit_with_null_size() {
+    TVector<int> vec1;
+    vec1.shrink_to_fit();
+    if (vec1.capacity() != 0) {
+        return false;
+    }
+    if (vec1.size() != 0) {
+        return false;
+    }
+    if (vec1.data() != nullptr) {
+        return false;
+    }
+    if (vec1.states() != nullptr) {
+        return false;
+    }
+    return true;
+}
+bool test_61_reserve() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.reserve(17);
+    if (vec1.capacity() != 17) {
+        return false;
+    }
+    return true;
+}
+bool test_62_reserve_return() {
+    TVector<int> vec1(40);
+    vec1.reserve(16);
+    if (vec1.capacity() != 45) {
+        return false;
+    }
+    return true;
+}
+bool test_63_reserve_in_empty_vec() {
+    TVector<int> vec1;
+    vec1.reserve(5);
+    if (vec1.capacity() != 5) {
+        return false;
+    }
+    if (vec1.data() == nullptr) {
+        return false;
+    }
+    return true;
+}
+bool test_64_resize_increasing_the_size() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.resize(25); //заполняет нулями
+    if (vec1.size() != 25) {
+        return false;
+    }
+    return true;
+}
+bool test_65_resize_reducing_the_size() {
+    int arr[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    TVector<int> vec1(arr, 16);
+    vec1.resize(5);
+    if (vec1.size() != 5) {
+        return false;
+    }
+    return true;
+}
+bool test_66_resize_increasing_the_size_with_value() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    vec1.resize(25, 111); 
+    if (vec1.size() != 25) {
+        return false;
+    }
+    return true;
+}
+bool test_67_resize_in_empty_vec() {
+    TVector<int> vec1;
+    vec1.resize(5);
+    if (vec1.size() != 5) {
+        return false;
+    }
+    return true;
+}
+bool test_68_resize_in_empty_vec_with_value() {
+    TVector<int> vec1;
+    vec1.resize(5, 111);
+    if (vec1.size() != 5) {
+        return false;
+    }
+    for (size_t i = 0; i < 5; i++) {
+        if (vec1.data()[i] != 111) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_69_the_assignment_operator() {
+    int arr[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    TVector<int> vec1(20);
+    TVector<int> vec2(arr, 16);
+    vec1 = vec2;
+    if (vec1.size() != 16) {
+        return false;
+    }
+    for (size_t i = 0; i < 16; i++) {
+        if (vec1.data()[i] != arr[i]) {
+            return false;
+        }
+    }
+    for (size_t i = 0; i < 16; i++) {
+        if (vec1.states()[i] != busy) {  
+            return false;
+        }
+    }
+    return true;
+}
+bool test_70_the_assignment_operator_for_empty_vec() {
+    int arr[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    TVector<int> vec1(arr, 16);
+    TVector<int> vec2;
+    vec1 = vec2;
+    if (vec1.size() != 0) {
+        return false;
+    }
+    return true;
+}
+bool test_71_comparison_operator() {
+    int arr[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    TVector<int> vec1(arr, 16);
+    TVector<int> vec2(vec1);
+    bool expected_res = true;
+    bool actual_res = (vec1 == vec2);
+    return TestSystem::check(expected_res, actual_res);
+}
+bool test_72_comparison_operator_for_empty_vec() {
+    TVector<int> vec1;
+    TVector<int> vec2;
+    return vec1 == vec2;
+}
+bool test_73_comparison_operator_after_erase() {
+    int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    TVector<int> vec1(arr1, 16);
+    int arr2[15] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    TVector<int> vec2(arr2, 15);
+    vec1.pop_front_elem();
+    bool expected_res = true;
+    bool actual_res = (vec1 == vec2);
+    return TestSystem::check(expected_res, actual_res);
+}
+bool test_74_indexing_operator() {
+    int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+    TVector<int> vec1(arr1, 16);
+    int expected_res = 1;
+    int actual_res = vec1[0];
+    std::cout << actual_res;
+    return (expected_res == actual_res);
+}
+bool test_75_indexing_operator_modification() {
+    int arr1[3] = { 1, 2, 3 };
+    TVector<int> vec1(arr1, 3);
+    vec1[1] = 100; 
+    return vec1[0] == 1 && vec1[1] == 100 && vec1[2] == 3;
+}
+bool test_76_find_first_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     int actual_res = find_first_elem(vec1, 6);
     int expected_res = 5;
     return TestSystem::check(actual_res, expected_res);
 }
-
-bool test_k_not_find_first_elem() {
+bool test_77_not_find_first_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     int actual_res = find_first_elem(vec1, 111);
     int expected_res = -1;
     return TestSystem::check(actual_res, expected_res);
 }
-
-bool test_k_not_find_last_elem() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    int actual_res = find_last_elem(vec1, 111);
-    int expected_res = -1;
-    return TestSystem::check(actual_res, expected_res);
-}
-
-bool test_k_not_find_elems() {
-    int arr[14] = { 1, 2, 3, 4, 5, 10, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    int count = 0;
-    int* expected_res = find_elems(vec1, 111, count);
-    bool actual_res = true;
-    if (expected_res != nullptr || count != 0) {
-        actual_res = false;
-    }
-    return true;
-}
-
-bool test_k2_find_last_elem() {
+bool test_78_find_last_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 10, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     int actual_res = find_last_elem(vec1, 10);
     int expected_res = 9;
     return TestSystem::check(actual_res, expected_res);
 }
-
-bool test_k2_find_all_elem() {
+bool test_79_not_find_last_elem() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    int actual_res = find_last_elem(vec1, 111);
+    int expected_res = -1;
+    return TestSystem::check(actual_res, expected_res);
+}
+bool test_80_find_elems() {
     int arr[14] = { 1, 2, 3, 4, 5, 10, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     int count = 0;
@@ -844,10 +1015,19 @@ bool test_k2_find_all_elem() {
     }
     return true;
 }
-
-bool test_k_find_first_elem_in_empty_mass() {
+bool test_81_not_find_elems() {
+    int arr[14] = { 1, 2, 3, 4, 5, 10, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14);
+    int count = 0;
+    int* actual_res = find_elems(vec1, 111, count);
+    bool expected_res = true;
+    if (actual_res != nullptr || count != 0) {
+        expected_res = false;
+    }
+    return true;
+}
+bool test_82_find_first_elem_in_empty_vec() {
     TVector<int> vec1;
-
     bool expected_result = true;
     bool actual_result = false;
     try {
@@ -856,13 +1036,10 @@ bool test_k_find_first_elem_in_empty_mass() {
     catch (const std::exception& ex) {
         actual_result = true;
     }
-
     return TestSystem::check(expected_result, actual_result);
 }
-
-bool test_k2_find_last_elem_in_empty_mass() {
+bool test_83_find_last_elem_in_empty_vec() {
     TVector<int> vec1;
-
     bool expected_result = true;
     bool actual_result = false;
     try {
@@ -871,12 +1048,10 @@ bool test_k2_find_last_elem_in_empty_mass() {
     catch (const std::exception& ex) {
         actual_result = true;
     }
-
     return TestSystem::check(expected_result, actual_result);
 }
-bool test_k2_find_all_elem_in_empty_mass() {
+bool test_84_find_elems_in_empty_vec() {
     TVector<int> vec1;
-
     bool expected_result = true;
     bool actual_result = false;
     try {
@@ -886,23 +1061,9 @@ bool test_k2_find_all_elem_in_empty_mass() {
     catch (const std::exception& ex) {
         actual_result = true;
     }
-
     return TestSystem::check(expected_result, actual_result);
 }
-bool test_s_emplace() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec1(arr, 14);
-    vec1.emplace(6, 11037);
-    int expected_res[14] = { 1, 2, 3, 4, 5, 6, 11037, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec2(expected_res, 14);
-
-    if (vec1 != vec2) {
-        return false;
-    }
-    return true;
-}
-
-bool test_s_randomize() {
+bool test_85_randomize() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     TVector<int> vec1(arr, 14);
     randomize(vec1);
@@ -912,7 +1073,7 @@ bool test_s_randomize() {
     }
     return true;
 }
-bool test_s_randomize_empty_mass() {
+bool test_86_randomize_in_empty_vec() {
     TVector<int> vec1;
     randomize(vec1);
 
@@ -921,7 +1082,7 @@ bool test_s_randomize_empty_mass() {
     }
     return true;
 }
-bool test_s_randomize_one_elem() {
+bool test_87_randomize_one_elem() {
     TVector<int> vec1(1);
     randomize(vec1);
 
@@ -930,96 +1091,7 @@ bool test_s_randomize_one_elem() {
     }
     return true;
 }
-//bool test_s2_emplace() {
-//    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-//    TVector<int> vec1(arr, 14);
-//    int mass[3] = { 444, 555, 666 };
-//    vec1.emplace(6, mass);
-//    int expected_res[17] = { 1, 2, 3, 4, 5, 6, 444, 555, 666, 8, 9, 10, 11, 12, 13, 14 };
-//    TVector<int> vec2(expected_res, 14);
-//
-//    if (vec1 != vec2) {
-//        return false;
-//    }
-//    return true;
-//}
-
-
-bool test_clear() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec(arr, 14);
-    vec.clear();
-    if (vec.size() != 0) return false;
-    for (size_t i = 0; i < vec.capacity(); ++i) {
-        if (vec.states()[i] != empty) return false;
-    }
-    return true;
-}
-
-bool test_null_clear() {
-    TVector<char> vec;
-    vec.clear();
-    if (vec.size() != 0) return false;
-    if (vec.capacity() != 0) return false;
-    return true;
-}
-
-bool test_reserve_return() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec(arr, 14);
-    vec.reserve(13);
-    if (vec.capacity() != 15) return false;
-    return true;
-}
-
-bool test_reserve() {
-    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    TVector<int> vec(arr, 14);
-    vec.reserve(17);
-    if (vec.capacity() != 17) return false;
-    return true;
-}
-
-bool test_reserve_null_arr() {
-    TVector<int> vec;
-    vec.reserve(5);
-    if (vec.capacity() != 5) return false;
-    if (vec.size() != 0) return false;
-    if (vec.data() == nullptr) return false;
-    for (size_t i = 0; i < vec.capacity(); i++) {
-        if (vec.states()[i] != empty) return false;
-    }
-    return true;
-}
-
-bool test_shrink_to_fit_null_size() {
-    TVector<int> vec;
-    vec.shrink_to_fit();
-    if (vec.capacity() != 0) return false;
-    if (vec.size() != 0) return false;
-    if (vec.data() != nullptr) return false;
-    if (vec.states() != nullptr) return false;
-    return true;
-}
-
-bool test_shrink_to_fit() {
-    int arr[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-    TVector<int> vec(arr, 16);
-    vec.shrink_to_fit();
-    if (vec.capacity() != 16) return false;
-    for (size_t i = 0; i < vec.capacity(); i++) {
-        if (vec.states()[i] != busy) return false;
-    }
-
-    return true;
-}
-
-//bool test_shrink_to_fit() {
-//    TVector<int> vec;
-//    vec.reserve(5);
-//    return true;
-//}
-bool test_n_pop_front_elem_after_push_front_elem() {
+bool test_88_pop_front_elem_after_push_front_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result[15] = { 2, 1, 1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 15);
@@ -1029,18 +1101,14 @@ bool test_n_pop_front_elem_after_push_front_elem() {
     if (vec1.size() != 14) {
         return false;
     }
-
-    std::cout << std::endl;
-
     for (size_t i = 0; i < 15; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
         }
     }
     return true;
-
 }
-bool test_n_pop_back_elem_after_push_back_elem() {
+bool test_89_pop_back_elem_after_push_back_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result[15] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 15);
@@ -1050,16 +1118,14 @@ bool test_n_pop_back_elem_after_push_back_elem() {
     if (vec1.size() != 14) {
         return false;
     }
-
     for (size_t i = 0; i < 15; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
         }
     }
     return true;
-
 }
-bool test_n_erase_elem_after_insert_elem() {
+bool test_90_erase_elem_after_insert_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result[15] = { 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 15);
@@ -1069,16 +1135,14 @@ bool test_n_erase_elem_after_insert_elem() {
     if (vec1.size() != 14) {
         return false;
     }
-
     for (size_t i = 0; i < 15; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
         }
     }
     return true;
-
 }
-bool test_n_pop_front_elems_after_push_front_elems() {
+bool test_91_pop_front_elems_after_push_front_elems() {
     int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     int arr2[2] = { 1, 2 };
     int expected_result[18] = { 2, 2, 1, 1, 1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1, 1 };
@@ -1095,9 +1159,8 @@ bool test_n_pop_front_elems_after_push_front_elems() {
         }
     }
     return true;
-
 }
-bool test_n_pop_back_elems_after_push_back_elems() {
+bool test_92_pop_back_elems_after_push_back_elems() {
     int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     int arr2[2] = { 1, 2 };
     int expected_result[18] = { 1, 1, 1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1, 1, 0, 0 };
@@ -1114,9 +1177,8 @@ bool test_n_pop_back_elems_after_push_back_elems() {
         }
     }
     return true;
-
 }
-bool test_n_erase_elems_after_insert_elems() {
+bool test_93_erase_elems_after_insert_elems() {
     int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     int arr2[2] = { 1, 2 };
     int expected_result[18] = { 1, 1, 2, 2, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1 };
@@ -1134,11 +1196,11 @@ bool test_n_erase_elems_after_insert_elems() {
     }
     return true;
 }
-bool test_n_pop_front_elem_after_emplace_elem() {
+bool test_94_pop_front_elem_after_emplace_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result[14] = { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 14);
-    vec1.emplace(0, 5);
+    vec1.emplace(1, 5);
     vec1.pop_front_elem();
 
     if (vec1.size() != 13) {
@@ -1151,13 +1213,12 @@ bool test_n_pop_front_elem_after_emplace_elem() {
         }
     }
     return true;
-
 }
-bool test_n_pop_back_elem_after_emplace_elem() {
+bool test_95_pop_back_elem_after_emplace_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result[14] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 14);
-    vec1.emplace(13, 5);
+    vec1.emplace(14, 5);
     vec1.pop_back_elem();
 
     if (vec1.size() != 13) {
@@ -1172,11 +1233,11 @@ bool test_n_pop_back_elem_after_emplace_elem() {
     return true;
 
 }
-bool test_n_erase_elem_after_emplace_elem() {
+bool test_96_erase_elem_after_emplace_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result[14] = { 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 14);
-    vec1.emplace(2, 5);
+    vec1.emplace(3, 5);
     vec1.erase_elem(3);
 
     if (vec1.size() != 13) {
@@ -1191,7 +1252,7 @@ bool test_n_erase_elem_after_emplace_elem() {
     return true;
 
 }
-bool test_n_found_elem_after_pop_elem() {
+bool test_97_found_elem_after_pop_elem() {
     int arr[14] = { 1, 2, 3, 4, 1, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
     int expected_result = 2;
     TVector<int> vec1(arr, 14);
@@ -1218,94 +1279,105 @@ int main() {
     TestSystem::start_test(test_12_begin_empty_vector, "TVector.test_12_begin_empty_vector");
     TestSystem::start_test(test_13_end_vector_with_size, "TVector.test_13_end_vector_with_size");
     TestSystem::start_test(test_14_end_empty_vector, "TVector.test_14_end_empty_vector");
-    TestSystem::start_test(test_t_assign, "TVector.test_t_assign");
-    TestSystem::start_test(test_t_assign_in_empty_vec, "TVector.test_t_assign_in_empty_vec");
-    TestSystem::start_test(test_assign_zero_count, "TVector.test_assign_zero_count");
-    TestSystem::start_test(test_assign_large_count, "TVector.test_assign_large_count");
 
+    TestSystem::start_test(test_15_push_front_elem, "TVector.test_15_push_front_elem");
+    TestSystem::start_test(test_16_push_front_elems, "TVector.test_16_push_front_elems");
+    TestSystem::start_test(test_17_push_back_elem, "TVector.test_17_push_back_elem");
+    TestSystem::start_test(test_18_push_back_elems, "TVector.test_18_push_back_elems");
+    TestSystem::start_test(test_19_insert_elem, "TVector.test_19_insert_elem");
+    TestSystem::start_test(test_20_insert_elems, "TVector.test_20_insert_elems");
 
+    TestSystem::start_test(test_21_push_front_elem_in_empty_vec, "TVector.test_21_push_front_elem_in_empty_vec");
+    TestSystem::start_test(test_22_push_front_elems_in_empty_vec, "TVector.test_22_push_front_elems_in_empty_vec");
+    TestSystem::start_test(test_23_push_back_elem_in_empty_vec, "TVector.test_23_push_back_elem_in_empty_vec");
+    TestSystem::start_test(test_24_push_back_elems_in_empty_vec, "TVector.test_24_push_back_elems_in_empty_vec");
+    TestSystem::start_test(test_25_insert_elem_in_empty_vec, "TVector.test_25_insert_elem_in_empty_vec");
+    TestSystem::start_test(test_26_insert_elems_in_empty_vec, "TVector.test_26_insert_elems_in_empty_vec");
+    TestSystem::start_test(test_27_insert_elem_pos_out_of_range, "TVector.test_27_insert_elem_pos_out_of_range");
+    TestSystem::start_test(test_28_insert_elems_pos_out_of_range, "TVector.test_28_insert_elems_pos_out_of_range");
 
+    TestSystem::start_test(test_29_pop_front_elem, "TVector.test_29_pop_front_elem");
+    TestSystem::start_test(test_30_pop_front_elems, "TVector.test_30_pop_front_elems");
+    TestSystem::start_test(test_31_pop_front_elem_in_empty_vec, "TVector.test_31_pop_front_elem_in_empty_vec");
+    TestSystem::start_test(test_32_pop_front_elems_in_empty_vec, "TVector.test_32_pop_front_elems_in_empty_vec");
+    TestSystem::start_test(test_33_pop_front_elems_count_out_of_range, "TVector.test_33_pop_front_elems_count_out_of_range");
 
-
-    //вставка
-    TestSystem::start_test(test_n_push_front_elem, "TVector.test_n_push_front_elem");
-    TestSystem::start_test(test_n_push_back_elem, "TVector.test_n_back_front_elem");
-    TestSystem::start_test(test_n_insert_elem, "TVector.test_n_insert_elem");
-    TestSystem::start_test(test_n_push_front_elem_in_empty_mass, "TVector.test_n_push_front_elem_in_empty_mass");
-    TestSystem::start_test(test_n_push_back_elem_in_empty_mass, "TVector.test_n_back_front_elem_in_empty_mass");
-    TestSystem::start_test(test_n_insert_elem_in_empty_mass, "TVector.test_n_insert_elem_in_empty_mass");
-    TestSystem::start_test(test_n_push_front_elems, "TVector.test_n_push_front_elems");
-    TestSystem::start_test(test_n2_push_back_elems, "TVector.test_n_push_back_elems");
-    TestSystem::start_test(test_n3_insert_elems, "TVector.test_n_insert_elems");
-    TestSystem::start_test(test_n_push_front_elems_in_empty_mass, "TVector.test_n_push_front_elems_in_empty_mass");
-    TestSystem::start_test(test_n_push_back_elems_in_empty_mass, "TVector.test_n_back_front_elems_in_empty_mass");
-    TestSystem::start_test(test_n_insert_elems_in_empty_mass, "TVector.test_n_insert_elems_in_empty_mass");
-    TestSystem::start_test(test_n3_insert_elems_error, "TVector.test_n3_insert_elems_error");
-    TestSystem::start_test(test_n3_insert_elem_error, "TVector.test_n_insert_elem_error");
-    TestSystem::start_test(test_n3_insert_elems_error, "TVector.test_n_insert_elems_error");
-
-    //удаление
-    TestSystem::start_test(test_n_pop_front_elem, "TVector.test_n_pop_front_elem");
-    TestSystem::start_test(test_n_pop_front_elems, "TVector.test_n_pop_front_elems");
-    TestSystem::start_test(test_n_pop_front_elem_in_empty_mass, "TVector.test_n_pop_front_elem_in_empty_mass");
-    TestSystem::start_test(test_n_pop_front_elems_in_empty_mass, "TVector.test_n_pop_front_elems_in_empty_mass");
-    TestSystem::start_test(test_n_pop_back_elems_error, "TVector.test_n_pop_back_elems_error");
-    TestSystem::start_test(test_n_pop_back_elem, "TVector.test_n_pop_back_elem");
-    TestSystem::start_test(test_n_pop_back_elems, "TVector.test_n_pop_back_elems");
-    TestSystem::start_test(test_n_pop_back_elem_in_empty_mass, "TVector.test_n_pop_back_elem_in_empty_mass");
-    TestSystem::start_test(test_n_pop_back_elems_in_empty_mass, "TVector.test_n_pop_back_elems_in_empty_mass");
-    TestSystem::start_test(test_n_pop_back_elems_error, "TVector.test_n_pop_back_elems_error");
-    TestSystem::start_test(test_n_erase_elem, "TVector.test_n_erase_elem");
-    TestSystem::start_test(test_n_erase_elems, "TVector.test_n_erase_elems");
-    TestSystem::start_test(test_n_erase_elem_in_empty_mass, "TVector.test_n_erase_elem_in_empty_mass");
-    TestSystem::start_test(test_n_erase_elems_in_empty_mass, "TVector.test_n_erase_elems_in_empty_mass");
-    TestSystem::start_test(test_n_erase_elem_error, "TVector.test_n_erase_elem_error");
-    TestSystem::start_test(test_n_erase_elem_error, "TVector.test_n_erase_elems_error");
-    TestSystem::start_test(test_n_erase_elems_pos_out_of_range, "TVector.test_n_erase_elems_pos_out_of_range");
-
+    TestSystem::start_test(test_34_pop_back_elem, "TVector.test_34_pop_back_elem");
+    TestSystem::start_test(test_35_pop_back_elems, "TVector.test_35_pop_back_elems");
+    TestSystem::start_test(test_36_pop_back_elem_in_empty_vec, "TVector.test_36_pop_back_elem_in_empty_vec");
+    TestSystem::start_test(test_37_pop_back_elems_in_empty_vec, "TVector.test_37_pop_back_elems_in_empty_vec");
+    TestSystem::start_test(test_38_pop_back_elems_count_out_of_range, "TVector.test_38_pop_back_elems_count_out_of_range");
     
+    TestSystem::start_test(test_39_erase_elem, "TVector.test_39_erase_elem");
+    TestSystem::start_test(test_40_erase_elems, "TVector.test_40_erase_elems");
+    TestSystem::start_test(test_41_erase_elem_in_empty_vec, "TVector.test_41_erase_elem_in_empty_vec");
+    TestSystem::start_test(test_42_erase_elems_in_empty_vec, "TVector.test_42_erase_elems_in_empty_vec");
+    TestSystem::start_test(test_43_erase_elem_pos_out_of_range, "TVector.test_43_erase_elem_pos_out_of_range");
+    TestSystem::start_test(test_44_erase_elems_pos_out_of_range, "TVector.test_44_erase_elems_pos_out_of_range");
+    
+    TestSystem::start_test(test_45_emplace, "TVector.test_45_emplace");
+    TestSystem::start_test(test_46_emplace_in_empty_vec, "TVector.test_46_emplace_in_empty_vec");
+    TestSystem::start_test(test_47_emplace_pos_out_of_range, "TVector.test_47_emplace_pos_out_of_range");
+    TestSystem::start_test(test_48_emplace_not_busy, "TVector.test_48_emplace_not_busy");
 
-    //поиск
-    TestSystem::start_test(test_k_find_first_elem, "TVector.test_k_find_first_elem");
-    TestSystem::start_test(test_k_not_find_first_elem, "TVector.test_k_not_find_first_elem");
-    TestSystem::start_test(test_k2_find_last_elem, "TVector.test_k2_find_last_elem");
-    TestSystem::start_test(test_k_not_find_last_elem, "TVector.test_k_not_find_last_elem");
-    TestSystem::start_test(test_k2_find_all_elem, "TVector.test_k2_find_all_elem");
-    TestSystem::start_test(test_k_not_find_elems, "TVector.test_k_not_find_elems");
-    TestSystem::start_test(test_k_find_first_elem_in_empty_mass, "TVector.test_k_find_first_elem_in_empty_mass");
-    TestSystem::start_test(test_k2_find_last_elem_in_empty_mass, "TVector.test_k2_find_last_elem_in_empty_mass");
-    TestSystem::start_test(test_k2_find_all_elem_in_empty_mass, "TVector.test_k2_find_all_elem_in_empty_mass");
+    TestSystem::start_test(test_49_assign, "TVector.test_49_assign");
+    TestSystem::start_test(test_50_assign_in_empty_vec, "TVector.test_50_assign_in_empty_vec");
+    TestSystem::start_test(test_51_assign_with_null_size, "TVector.test_51_assign_with_null_size");
+    TestSystem::start_test(test_52_assign_to_large_vec, "TVector.test_52_assign_to_large_vec");
+    TestSystem::start_test(test_53_repeat_assign, "TVector.test_53_repeat_assign");
 
-    //замена
-    TestSystem::start_test(test_s_emplace, "TVector.test_s_emplace");
+    TestSystem::start_test(test_54_at, "TVector.test_54_at");
+    TestSystem::start_test(test_55_at_index_out_of_range, "TVector.test_55_at_index_out_of_range");
+    TestSystem::start_test(test_56_at_with_an_invalid_elem, "TVector.test_56_at_with_an_invalid_elem");
+    TestSystem::start_test(test_57_at_in_empty_vec, "TVector.test_57_at_in_empty_vec");
 
-    //память
-    TestSystem::start_test(test_clear, "TVector.test_clear");
-    TestSystem::start_test(test_null_clear, "TVector.test_null_clear");
-    TestSystem::start_test(test_reserve_return, "TVector.test_reserve_return");
-    TestSystem::start_test(test_reserve, "TVector.test_reserve");
-    TestSystem::start_test(test_reserve_null_arr, "TVector.test_reserve_null_arr");
-    TestSystem::start_test(test_shrink_to_fit_null_size, "TVector.test_shrink_to_fit_null_size");
-    TestSystem::start_test(test_shrink_to_fit, "TVector.test_shrink_to_fit");
+    TestSystem::start_test(test_58_clear, "TVector.test_58_clear");
+    TestSystem::start_test(test_59_shrink_to_fit, "TVector.test_59_shrink_to_fit");
+    TestSystem::start_test(test_60_shrink_to_fit_with_null_size, "TVector.test_60_shrink_to_fit_with_null_size");
+    TestSystem::start_test(test_61_reserve, "TVector.test_61_reserve");
+    TestSystem::start_test(test_62_reserve_return, "TVector.test_62_reserve_return");
+    TestSystem::start_test(test_63_reserve_in_empty_vec, "TVector.test_63_reserve_in_empty_vec");
 
-    //at
-    //перемешивание
-    TestSystem::start_test(test_s_randomize, "TVector.test_s_randomize");
-    TestSystem::start_test(test_s_randomize_empty_mass, "TVector.test_s_randomize_empty_mass");
-    TestSystem::start_test(test_s_randomize_one_elem, "TVector.test_s_randomize_one_elem");
-    //двойные
-    TestSystem::start_test(test_n_pop_front_elem_after_push_front_elem, "TVector.test_n_pop_front_elem_after_push_front_elem");
-    TestSystem::start_test(test_n_pop_back_elem_after_push_back_elem, "TVector.test_n_pop_back_elem_after_push_back_elem");
-    TestSystem::start_test(test_n_erase_elem_after_insert_elem, "TVector.test_n_erase_elem_after_insert_elem");
-    TestSystem::start_test(test_n_pop_front_elems_after_push_front_elems, "TVector.test_n_pop_front_elems_after_push_front_elems");
-    TestSystem::start_test(test_n_pop_back_elems_after_push_back_elems, "TVector.test_n_pop_back_elems_after_push_back_elems");
-    TestSystem::start_test(test_n_erase_elems_after_insert_elems, "TVector.test_n_erase_elems_after_insert_elems");
+    TestSystem::start_test(test_64_resize_increasing_the_size, "TVector.test_64_resize_increasing_the_size");
+    TestSystem::start_test(test_65_resize_reducing_the_size, "TVector.test_65_resize_reducing_the_size");
+    TestSystem::start_test(test_66_resize_increasing_the_size_with_value, "TVector.test_66_resize_increasing_the_size_with_value");
+    TestSystem::start_test(test_67_resize_in_empty_vec, "TVector.test_67_resize_in_empty_vec");
+    TestSystem::start_test(test_68_resize_in_empty_vec_with_value, "TVector.test_68_resize_in_empty_vec_with_value");
+    
+    TestSystem::start_test(test_69_the_assignment_operator, "TVector.test_69_the_assignment_operator");
+    TestSystem::start_test(test_70_the_assignment_operator_for_empty_vec, "TVector.test_70_the_assignment_operator_for_empty_vec");
+    TestSystem::start_test(test_71_comparison_operator, "TVector.test_71_comparison_operator");
+    TestSystem::start_test(test_72_comparison_operator_for_empty_vec, "TVector.test_72_comparison_operator_for_empty_vec");
+    TestSystem::start_test(test_73_comparison_operator_after_erase, "TVector.test_73_comparison_operator_after_erase");
+    TestSystem::start_test(test_74_indexing_operator, "TVector.test_74_indexing_operator");
+    TestSystem::start_test(test_75_indexing_operator_modification, "TVector.test_75_indexing_operator_modification");
+   
+    TestSystem::start_test(test_76_find_first_elem, "TVector.test_76_find_first_elem");
+    TestSystem::start_test(test_77_not_find_first_elem, "TVector.test_77_not_find_first_elem");
+    TestSystem::start_test(test_78_find_last_elem, "TVector.test_78_find_last_elem");
+    TestSystem::start_test(test_79_not_find_last_elem, "TVector.test_79_not_find_last_elem");
+    TestSystem::start_test(test_80_find_elems, "TVector.test_80_find_elems");
+    TestSystem::start_test(test_81_not_find_elems, "TVector.test_81_not_find_elems");
+    TestSystem::start_test(test_82_find_first_elem_in_empty_vec, "TVector.test_82_find_first_elem_in_empty_vec");
+    TestSystem::start_test(test_83_find_last_elem_in_empty_vec, "TVector.test_83_find_last_elem_in_empty_vec");
+    TestSystem::start_test(test_84_find_elems_in_empty_vec, "TVector.test_84_find_elems_in_empty_vec");
+
+    TestSystem::start_test(test_85_randomize, "TVector.test_85_randomize");
+    TestSystem::start_test(test_86_randomize_in_empty_vec, "TVector.test_86_randomize_in_empty_vec");
+    TestSystem::start_test(test_87_randomize_one_elem, "TVector.test_87_randomize_one_elem");
+
+    TestSystem::start_test(test_88_pop_front_elem_after_push_front_elem, "TVector.test_88_pop_front_elem_after_push_front_elem");
+    TestSystem::start_test(test_89_pop_back_elem_after_push_back_elem, "TVector.test_89_pop_back_elem_after_push_back_elem");
+    TestSystem::start_test(test_90_erase_elem_after_insert_elem, "TVector.test_90_erase_elem_after_insert_elem");
+    TestSystem::start_test(test_91_pop_front_elems_after_push_front_elems, "TVector.test_91_pop_front_elems_after_push_front_elems");
+    TestSystem::start_test(test_92_pop_back_elems_after_push_back_elems, "TVector.test_92_pop_back_elems_after_push_back_elems");
+    TestSystem::start_test(test_93_erase_elems_after_insert_elems, "TVector.test_93_erase_elems_after_insert_elems");
     //поиск после удаления 9 (3 поиска на 3 удаления) и (1 поиск и 3 удалени я нескольких)
-    TestSystem::start_test(test_n_found_elem_after_pop_elem, "TVector.test_n_found_elem_after_pop_elem");
 
-    TestSystem::start_test(test_n_pop_front_elem_after_emplace_elem, "TVector.test_n_pop_front_elem_after_emplace_elem");
-    TestSystem::start_test(test_n_pop_back_elem_after_emplace_elem, "TVector.test_n_pop_back_elem_after_emplace_elem");
-    TestSystem::start_test(test_n_erase_elem_after_emplace_elem, "TVector.test_n_erase_elem_after_emplace_elem");
+    TestSystem::start_test(test_94_pop_front_elem_after_emplace_elem, "TVector.test_94_pop_front_elem_after_emplace_elem");
+    TestSystem::start_test(test_95_pop_back_elem_after_emplace_elem, "TVector.test_95_pop_back_elem_after_emplace_elem");
+    TestSystem::start_test(test_96_erase_elem_after_emplace_elem, "TVector.test_96_erase_elem_after_emplace_elem");
+    TestSystem::start_test(test_97_found_elem_after_pop_elem, "TVector.test_97_found_elem_after_pop_elem");
     //удаление после замены нескольких
 
 

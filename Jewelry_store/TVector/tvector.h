@@ -484,19 +484,23 @@ void TVector<T>::erase_elems(size_t pos, size_t count) {
 template <typename T>
 template <typename... Args>
 void TVector<T>::emplace(size_t pos, Args&&... args) {
+	if (_size == 0) {
+		throw std::out_of_range("TVector::emplace: cannot be emplaced from an empty vector");
+	}
 	if (pos > _size || pos < 0) {
 		throw std::out_of_range("TVector::emplace: emplace position out of range");
 	}
-	if (_states[pos] != busy) {
-		throw std::logic_error("TVector::emplace: not busy element cannot be replaced");
+	int busy_count = 0;
+	for (size_t i = 0; i < _size; i++) {
+		if (_states[i] == busy) {
+			busy_count++;
+			if (busy_count == pos) {
+				_data[i].~T();
+				new (&_data[i]) T(std::forward<Args>(args)...);
+				_states[i] = busy;
+			}
+		}
 	}
-
-	if (_states[pos] == busy) {
-		_data[pos].~T(); 
-	}
-
-	new (&_data[pos]) T(std::forward<Args>(args)...);
-	_states[pos] = busy; 
 }
 
 template<class T>
@@ -509,14 +513,14 @@ void TVector<T>::assign(size_t size, const T& value) {
 }
 
 template<class T>
-T& TVector<T>::at(size_t pos) {
-	if (pos >= _size) {
+T& TVector<T>::at(size_t index) {
+	if (index >= _size) {
 		throw std::out_of_range("TVector::at: index out of range");
 	}
-	if (_states[pos] != busy) {
-		throw std::logic_error("TVector::at: element at position is not valid");
+	if (_states[index] != busy) {
+		throw std::logic_error("TVector::at: element at index is not valid");
 	}
-	return _data[pos];
+	return _data[index];
 }
 
 template<class T>
@@ -533,23 +537,18 @@ void TVector<T>::clear() noexcept {
 template<class T>
 void TVector<T>::shrink_to_fit() {
 	if (_size == 0) {
-		delete[] _data;
-		delete[] _states;
-		_data = nullptr;
-		_states = nullptr;
-		_capacity = 0;
+		clear();
 		return;
 	}
 
 	T* new_data = new T[_size];
 	State* new_states = new State[_size];
 
-	size_t new_index = 0;
-	for (size_t i = 0; i < _capacity; ++i) {
+	for (size_t i = 0, j = 0; i < _capacity; i++) {
 		if (_states[i] == busy) {
-			new (new_data + new_index) T(std::move(_data[i]));
-			new_states[new_index] = busy;
-			++new_index;
+			new_data[j] = std::move(_data[i]); 
+			new_states[j] = busy;
+			j++;
 			_data[i].~T();
 		}
 	}
@@ -573,7 +572,7 @@ void TVector<T>::reserve(size_t new_capacity) {
 
 	for (size_t i = 0; i < _capacity; ++i) {
 		if (_states[i] == busy) {
-			new (new_data + i) T(std::move(_data[i]));
+			new_data[i] = std::move(_data[i]);
 			new_states[i] = busy;
 			_data[i].~T();
 		}
@@ -589,7 +588,7 @@ void TVector<T>::reserve(size_t new_capacity) {
 template<class T>
 void TVector<T>::resize(size_t new_size) {
 	if (new_size < _size) {
-		for (size_t i = new_size; i < _size; ++i) {
+		for (size_t i = new_size; i < _size; i++) {
 			if (_states[i] == busy) {
 				_data[i].~T();
 				_states[i] = empty;
@@ -599,8 +598,8 @@ void TVector<T>::resize(size_t new_size) {
 	}
 	else if (new_size > _size) {
 		reserve(new_size);
-		for (size_t i = _size; i < new_size; ++i) {
-			new (_data + i) T();
+		for (size_t i = _size; i < new_size; i++) {
+			_data[i] = T(); //инициализация значением по умолчанию
 			_states[i] = busy;
 		}
 		_size = new_size;
@@ -621,7 +620,7 @@ void TVector<T>::resize(size_t new_size, const T& value) {
 	else if (new_size > _size) {
 		reserve(new_size);
 		for (size_t i = _size; i < new_size; i++) {
-			new (_data + i) T(value);
+			_data[i] = T(value);
 			_states[i] = busy;
 		}
 		_size = new_size;
@@ -633,9 +632,9 @@ TVector<T>& TVector<T>::operator=(const TVector<T>& other) {
 	if (this != &other) {
 		clear();
 		reserve(other._capacity);
-		for (size_t i = 0; i < other._size; ++i) {
+		for (size_t i = 0; i < other._size; i++) {
 			if (other._states[i] == busy) {
-				new (_data + i) T(other._data[i]);
+				_data[i] = T(other._data[i]);
 				_states[i] = busy;
 			}
 		}
@@ -644,22 +643,31 @@ TVector<T>& TVector<T>::operator=(const TVector<T>& other) {
 	}
 	return *this;
 }
-
 template <typename T>
 bool TVector<T>::operator==(const TVector<T>& other) const {
+	if (this == &other) return true;
 	if (_size != other._size) return false;
-	for (size_t i = 0; i < _size; ++i) {
-		if (_states[i] != other._states[i]) return false;
-		if (_states[i] == busy && !(_data[i] == other._data[i])) return false;
+
+	for (size_t i = 0; i < _size; i++) {
+		if (_states[i] == busy) {
+			bool found = false;
+			for (size_t j = 0; j < other._size; j++) {
+				if (other._states[j] == busy && _data[i] == other._data[j]) {
+					found = true;
+					other._states[j] = deleted;
+					break;
+				}
+			}
+			if (!found) return false;
+		}
 	}
+
 	return true;
 }
-
 template <typename T>
 bool TVector<T>::operator!=(const TVector<T>& other) const {
 	return !(*this == other);
 }
-
 template <typename T>
 T& TVector<T>::operator[](size_t pos) {
 	/*if (pos >= _size) {
@@ -667,7 +675,6 @@ T& TVector<T>::operator[](size_t pos) {
 	}*/
 	return _data[pos];
 }
-
 template<class T>
 void TVector<T>::print_elems() {
 	int entrance = 0;
@@ -770,7 +777,6 @@ void TVector<T>::allocate_memory(size_t new_capacity) {
 	T* new_data = static_cast<T*>(operator new[](new_capacity * sizeof(T)));
 	State* new_states = new State[new_capacity];
 
-	// Инициализация состояний
 	for (size_t i = 0; i < new_capacity; ++i) {
 		new_states[i] = empty;
 	}
@@ -782,44 +788,26 @@ void TVector<T>::allocate_memory(size_t new_capacity) {
 
 template<class T>
 void TVector<T>::reallocate_memory_for_delete() {
-	//// 1. Вычисляем сколько элементов нужно сохранить (только busy) 
-	//size_t busy_count = 0;
-	//for (size_t i = 0; i < _size; ++i) {
-	//    if (_states[i] == busy) busy_count++;
-	//}
-
-	//// 2. Если запрошенный размер слишком маленький - увеличиваем
-	//if (new_capacity < busy_count) {
-	//    new_capacity = busy_count;
-	//}
-
-	// 3. Выделяем новую память
 	T* new_data = new T[_size + STEP_OF_CAPACITY];
 	State* new_states = new State[_size + STEP_OF_CAPACITY];
 
-	// 4. Копируем только busy элементы
 	size_t new_index = 0;
 	for (size_t i = 0; i < _capacity; ++i) {
 		if (_states[i] == busy) {
-			//new_data[new_index] = std::move(_data[i]);  // Простое перемещение
 			new_data[new_index] = _data[i];
 			new_states[new_index] = busy;
 			new_index++;
 		}
 	}
 
-	// 5. Освобождаем старую память
 	delete[] _data;
 	delete[] _states;
 
-	// 6. Обновляем состояние
 	_data = new_data;
 	_states = new_states;
-	//_size = busy_count;
 	_capacity = _size + STEP_OF_CAPACITY;
 	_deleted = 0;
 
-	// 7. Помечаем оставшиеся ячейки как empty
 	for (size_t i = _size; i < _capacity; ++i) {
 		_states[i] = empty;
 	}
@@ -830,55 +818,41 @@ void TVector<T>::reallocate_memory(size_t new_capacity) {
 	if (_capacity == 0) {
 		allocate_memory(STEP_OF_CAPACITY);
 	}
-	// 1. Выделяем новую память
 	T* new_data = static_cast<T*>(operator new[](new_capacity * sizeof(T)));
 	State* new_states = new State[new_capacity];
 
-	// 2. Инициализируем все новые ячейки как empty
 	for (size_t i = 0; i < new_capacity; ++i) {
 		new_states[i] = empty;
 	}
 
-
-	// 3. Переносим только busy элементы
 	size_t new_size = 0;
 	for (size_t i = 0; i < _size; ++i) {
 		if (_states[i] == busy) {
-			// Конструируем объект в новой памяти
 			new (&new_data[new_size]) T(std::move(_data[i]));
 			new_states[new_size] = busy;
 			++new_size;
 
-			// Уничтожаем старый объект
 			_data[i].~T();
 		}
-		// DELETED элементы не переносим
 	}
-	// 4. Освобождаем старую память
-	operator delete[](_data);
+	delete[] _data;
 	delete[] _states;
-
-	// 5. Обновляем состояние
+	
 	_data = new_data;
 	_states = new_states;
-	//_size = new_size;
 	_capacity = new_capacity;
-	_deleted = 0;  // Все удаленные элементы исключены
+	_deleted = 0;
 }
 template<class T>
 void TVector<T>::free_memory() noexcept {
-	// Уничтожаем активные объекты
 	for (size_t i = 0; i < _size; ++i) {
 		if (_states[i] == busy) {
 			_data[i].~T();
 		}
 	}
-
-	// Освобождаем память
-	operator delete[](_data);
+	delete[] _data;
 	delete[] _states;
 
-	// Сбрасываем состояние
 	_data = nullptr;
 	_states = nullptr;
 	_size = 0;
