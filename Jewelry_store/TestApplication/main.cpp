@@ -965,7 +965,7 @@ bool test_74_indexing_operator() {
     TVector<int> vec1(arr1, 16);
     int expected_res = 1;
     int actual_res = vec1[0];
-    std::cout << actual_res;
+    //std::cout << actual_res;
     return (expected_res == actual_res);
 }
 bool test_75_indexing_operator_modification() {
@@ -1093,7 +1093,7 @@ bool test_87_randomize_one_elem() {
 }
 bool test_88_pop_front_elem_after_push_front_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    int expected_result[15] = { 2, 1, 1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1 };
+    int expected_result[15] = { 2, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 15);
     vec1.push_front_elem(4);
     vec1.pop_front_elem();
@@ -1145,7 +1145,7 @@ bool test_90_erase_elem_after_insert_elem() {
 bool test_91_pop_front_elems_after_push_front_elems() {
     int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     int arr2[2] = { 1, 2 };
-    int expected_result[18] = { 2, 2, 1, 1, 1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1, 1 };
+    int expected_result[18] = { 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     TVector<int> vec1(arr1, 16), vec2(expected_result, 18);
     vec1.push_front_elems(arr2, 2);
     vec1.pop_front_elems(2);
@@ -1163,7 +1163,7 @@ bool test_91_pop_front_elems_after_push_front_elems() {
 bool test_92_pop_back_elems_after_push_back_elems() {
     int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     int arr2[2] = { 1, 2 };
-    int expected_result[18] = { 1, 1, 1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1, 1, 0, 0 };
+    int expected_result[18] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 };
     TVector<int> vec1(arr1, 16), vec2(expected_result, 18);
     vec1.push_back_elems(arr2, 2);
     vec1.pop_back_elems(2);
@@ -1181,7 +1181,7 @@ bool test_92_pop_back_elems_after_push_back_elems() {
 bool test_93_erase_elems_after_insert_elems() {
     int arr1[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     int arr2[2] = { 1, 2 };
-    int expected_result[18] = { 1, 1, 2, 2, 1, 1,1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1 };
+    int expected_result[18] = { 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     TVector<int> vec1(arr1, 16), vec2(expected_result, 18);
     vec1.insert_elems(3, arr2, 2);
     vec1.erase_elems(3, 2);
@@ -1206,7 +1206,6 @@ bool test_94_pop_front_elem_after_emplace_elem() {
     if (vec1.size() != 13) {
         return false;
     }
-
     for (int i = 0; i < 14; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
@@ -1224,14 +1223,12 @@ bool test_95_pop_back_elem_after_emplace_elem() {
     if (vec1.size() != 13) {
         return false;
     }
-
     for (int i = 0; i < 14; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
         }
     }
     return true;
-
 }
 bool test_96_erase_elem_after_emplace_elem() {
     int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
@@ -1243,23 +1240,110 @@ bool test_96_erase_elem_after_emplace_elem() {
     if (vec1.size() != 13) {
         return false;
     }
-
     for (int i = 0; i < 14; i++) {
         if (vec1.states()[i] != expected_result[i]) {
             return false;
         }
     }
     return true;
-
 }
-bool test_97_found_elem_after_pop_elem() {
-    int arr[14] = { 1, 2, 3, 4, 1, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-    int expected_result = 2;
-    TVector<int> vec1(arr, 14);
-    vec1.erase_elems(1, 2);
-    int actual_result = find_first_elem(vec1, 1);
-    return TestSystem::check(expected_result, actual_result);
+bool test_97_find_elems_after_pop_elem() {
+    int arr[20] = { 1, 2, 3, 4, 1, 6, 7, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
+    TVector<int> vec1(arr, 20);
+    vec1.erase_elems(4, 3);
 
+    int expected_result[4] = { 0, 9, 13, 16};
+    int count = 0;
+    int* actual_result = find_elems(vec1, 1, count);
+    if (count != 4) {
+        return false;
+    }
+    for (int i = 0; i < count; i++) {
+        if (actual_result[i] != expected_result[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_98_emplace_after_erase_elem() {
+    int arr[20] = { 1, 2, 3, 4, 1, 6, 7, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
+    TVector<int> vec1(arr, 20);
+    vec1.erase_elems(5, 2);
+    vec1.emplace(5, 111);
+    int expected_result[18] = { 1, 2, 3, 4, 111, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
+    TVector<int> vec2(expected_result, 18);
+    
+    return (vec1 == vec2);
+}
+bool test_99_push_front_elem_after_pop_front_elem() {
+    int arr[20] = { 1, 2, 3, 4, 1, 6, 7, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
+    TVector<int> vec1(arr, 20);
+    vec1.pop_front_elem();
+    vec1.push_front_elem(111);
+    if (vec1.size() != 20) { 
+        return false;
+    }
+    if (vec1[0] != 111) {
+        return false;
+    }
+    return true;
+}
+bool test_100_find_elems_after_emplace() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    int expected_result[14] = { 1, 2, 111, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    TVector<int> vec1(arr, 14), vec2(expected_result, 14);
+    vec1.emplace(3, 111);
+    int count = 0;
+    int* actual_res = find_elems(vec1, 3, count);
+    bool expected_res = true;
+    if (actual_res != nullptr || count != 0) {
+        expected_res = false;
+    }
+    return true;
+}
+bool test_101_accessing_an_elem_using_an_iterator() {
+    int arr[32] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 111, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+    TVector<int> vec1(arr, 32);
+    int mass[4] = { 555, 666, 777, 888 };
+    auto it = vec1.begin();
+    return  (*(it) == 1);
+}
+bool test_102_hoara_sort() {
+    int arr[32] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 111, 222, 333, 444 };
+
+    TVector<int> vec1(arr, 32);
+    randomize(vec1);
+    hoara_sort(vec1);
+
+    for (size_t i = 1; i < 32; i++) {
+        if (vec1.states()[i] == busy && vec1.states()[i - 1] == busy) {
+            if (vec1[i] < vec1[i - 1]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+bool test_103_hoara_sort_after_erase_elem() {
+    int arr[32] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 111, 222, 333, 444 };
+
+    TVector<int> vec1(arr, 32);
+    vec1.erase_elem(5);
+    randomize(vec1);
+    hoara_sort(vec1);
+
+    if (vec1.size() != 31) {
+        return false;
+    }
+
+    for (size_t i = 1; i < 31; i++) {
+        if (vec1.states()[i] == busy && vec1.states()[i - 1] == busy) {
+            if (vec1[i] < vec1[i - 1]) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 int main() {
     TestSystem::print_init_info();
@@ -1372,33 +1456,21 @@ int main() {
     TestSystem::start_test(test_91_pop_front_elems_after_push_front_elems, "TVector.test_91_pop_front_elems_after_push_front_elems");
     TestSystem::start_test(test_92_pop_back_elems_after_push_back_elems, "TVector.test_92_pop_back_elems_after_push_back_elems");
     TestSystem::start_test(test_93_erase_elems_after_insert_elems, "TVector.test_93_erase_elems_after_insert_elems");
-    //поиск после удаления 9 (3 поиска на 3 удаления) и (1 поиск и 3 удалени я нескольких)
-
     TestSystem::start_test(test_94_pop_front_elem_after_emplace_elem, "TVector.test_94_pop_front_elem_after_emplace_elem");
     TestSystem::start_test(test_95_pop_back_elem_after_emplace_elem, "TVector.test_95_pop_back_elem_after_emplace_elem");
     TestSystem::start_test(test_96_erase_elem_after_emplace_elem, "TVector.test_96_erase_elem_after_emplace_elem");
-    TestSystem::start_test(test_97_found_elem_after_pop_elem, "TVector.test_97_found_elem_after_pop_elem");
-    //удаление после замены нескольких
+    TestSystem::start_test(test_97_find_elems_after_pop_elem, "TVector.test_97_find_elems_after_pop_elem");
+    TestSystem::start_test(test_98_emplace_after_erase_elem, "TVector.test_98_emplace_after_erase_elem");
+    TestSystem::start_test(test_99_push_front_elem_after_pop_front_elem, "TVector.test_99_push_front_elem_after_pop_front_elem");
+    TestSystem::start_test(test_100_find_elems_after_emplace, "TVector.test_100_find_elems_after_emplace");
+    
+    TestSystem::start_test(test_101_accessing_an_elem_using_an_iterator, "TVector.test_101_accessing_an_elem_using_an_iterator");
+    TestSystem::start_test(test_102_hoara_sort, "TVector.test_102_hoara_sort");
+    TestSystem::start_test(test_103_hoara_sort_after_erase_elem, "TVector.test_103_hoara_sort_after_erase_elem");
 
-
-    //замена после удаления 3
-    //вставка после замена
-    //замена после вставки
-    //поиск после замены 3 
-   //вставка после clear
-    //удаление после clear 
-
-    //деструктор
-    int arr[32] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 111, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
-    TVector<int> vec1(arr, 32);
-    int mass[4] = { 555, 666, 777, 888 };
-    auto it = vec1.begin();
-    std::cout << *(it) << std::endl;
-    vec1.print_elems();
-    vec1.print_states();
     TestSystem::print_final_info();
 
-    TVector<int> vec111;
+    /*TVector<int> vec111;
     std::cout << "vec111 (default constructor):\n";
     std::cout << " - Capacity: " << vec111.capacity() << "\n";
     std::cout << " - Size: " << vec111.size() << "\n";
@@ -1417,30 +1489,10 @@ int main() {
     std::cout << " - Size: " << vec333.size() << "\n";
     std::cout << " - Is empty? " << (vec333.is_empty() ? "Yes" : "No") << "\n\n";
 
-    vec222.push_front_elem(3);
-    std::cout << " The element at the end vec222 - " << vec222.back() << "\n";
     std::cout << " address data " << vec333.begin() << "\n";
     std::cout << " address data " << vec333.end() << "\n";
-
-    std::cout << " data mass " << vec333.data() << "\n";
-
-
-    std::cout << " The element at the end - " << vec333.back() << "\n";
-
-    vec333.print_elems();
-    //vec333.push_back_elem(505);
-    //vec333.insert_elem(6, 3);
-    //vec333.push_front_elem(1);
-    vec333.erase_elem(4);
-    vec333.erase_elem(4);
-
-    int first = find_first_elem(vec333, 6);
-    // Поиск последнего вхождения
-    int last = find_last_elem(vec333, 6);
-
-    vec333.print_elems();
-    vec333.print_states();
+    std::cout << " data mass " << vec333.data() << "\n";*/
 
     system("pause");
     return 0;
-} // доделать хоара 
+}
