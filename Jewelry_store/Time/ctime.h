@@ -1,30 +1,22 @@
 #pragma once
-
-enum Status { SUCCESS, ERROR, WARNING };
+#include <stdexcept>
 
 class Time {
-	int _hours;
-	int _mins;
-	int _seconds;
+private:
+    int _hours;
+    int _mins;
+    int _seconds;
 
 public:
-	Time();
-	Time(int hours, int mins, int seconds);
-	Time(const Time& time);
-	/*Time(std::string time);
+    Time();
+    Time(int hours, int mins, int seconds);
+    Time(const Time& other);
 
-	Status check();
-	Status convert();
+    int getHours() const { return _hours; }
+    int getMinutes() const { return _mins; }
+    int getSeconds() const { return _seconds; }
 
-	Status add_hours(int hours);
-	Status add_mins(int mins);
-	Status add_seconds(int seconds);
-	Time& add(const Time& time);
-
-	Status assign(const Time& time);
-	int compare(const Time& time);
-
-	Status input();
-	Status output();*/
-
+    void setHours(int hours);
+    void setMinutes(int mins);
+    void setSeconds(int seconds);
 };

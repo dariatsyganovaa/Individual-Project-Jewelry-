@@ -1,29 +1,21 @@
 #pragma once
+#include <string>
+
 class FIO {
-	char* _first_name;
-	char* _second_name;
-	char* _last_name;
+private:
+    std::string _surname;
+    std::string _name;
+    std::string _patronymic;
 
 public:
-	//конструкторы
-	FIO();
-	FIO(const char*, const char*, const char*);
-	FIO(char*, char*, char*);
-	FIO(const FIO&);
+    FIO(const std::string& surname, const std::string& name, const std::string& patronymic);
+    FIO(const FIO& other);
 
-	//деструктор
-	~FIO();
+    std::string getSurname() const { return _surname; }
+    std::string getName() const { return _name; }
+    std::string getPatronymic() const { return _patronymic; }
 
-	//сеттеры
-	void set_first_name(const char*);
-	void set_second_name(const char*);
-	void set_last_name(const char*);
-
-	//геттеры
-	const char* get_first_name();
-	const char* get_second_name();
-	const char* get_last_name();
-
-private:
-	void check_corrections(const char* name);
+    void setSurname(const std::string& surname);
+    void setName(const std::string& name);
+    void setPatronymic(const std::string& patronymic);
 };

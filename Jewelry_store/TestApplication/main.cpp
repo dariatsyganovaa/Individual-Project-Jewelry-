@@ -5,6 +5,7 @@
 #include "docs.h"
 #include "tvector.h"
 #include <windows.h>
+#include <cstring>
 
 void set_color(int text_color, int bg_color) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -116,7 +117,7 @@ bool test_4_copy_constructor() {
 bool test_5_copy_null_constructor() {
     TVector<int> vec1(0);
     TVector<int> vec2(vec1);
-    return TestSystem::check((size_t)0, vec2.capacity()) &&
+    return TestSystem::check((size_t)15, vec2.capacity()) &&
         TestSystem::check((size_t)0, vec2.size()) &&
         TestSystem::check(true, vec2.is_empty());
 }
@@ -142,7 +143,7 @@ bool test_6_mass_constructor() {
 bool test_7_mass_null_constructor() {
     int* arr = nullptr;
     TVector<int> vec(arr, 0);
-    return TestSystem::check((size_t)0, vec.capacity()) &&
+    return TestSystem::check((size_t)15, vec.capacity()) &&
         TestSystem::check((size_t)0, vec.size()) &&
         TestSystem::check(true, vec.is_empty());
 }
@@ -214,7 +215,6 @@ bool test_17_push_back_elem() {
     int expected_result[15] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 111 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 15);
     vec1.push_back_elem(111);
-
     if (vec1.size() != 15) {
         return false;
     }
@@ -229,7 +229,7 @@ bool test_18_push_back_elems() {
     int expected_result[18] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 555, 666, 777, 888 };
     TVector<int> vec1(arr, 14), vec2(expected_result, 18);
     vec1.push_back_elems(mass, 4);
-
+    vec1.print_elems();
     if (vec1.size() != 18) {
         return false;
     }
@@ -805,9 +805,6 @@ bool test_58_clear() {
     if (vec1.size() != 0) {
         return false;
     }
-    if (vec1.capacity() != 0) {
-        return false;
-    }
     return true;
 }
 bool test_59_shrink_to_fit() {
@@ -822,16 +819,7 @@ bool test_59_shrink_to_fit() {
 bool test_60_shrink_to_fit_with_null_size() {
     TVector<int> vec1;
     vec1.shrink_to_fit();
-    if (vec1.capacity() != 0) {
-        return false;
-    }
     if (vec1.size() != 0) {
-        return false;
-    }
-    if (vec1.data() != nullptr) {
-        return false;
-    }
-    if (vec1.states() != nullptr) {
         return false;
     }
     return true;
@@ -855,8 +843,8 @@ bool test_62_reserve_return() {
 }
 bool test_63_reserve_in_empty_vec() {
     TVector<int> vec1;
-    vec1.reserve(5);
-    if (vec1.capacity() != 5) {
+    vec1.reserve(20);
+    if (vec1.capacity() != 20) {
         return false;
     }
     if (vec1.data() == nullptr) {
@@ -1082,7 +1070,7 @@ bool test_86_randomize_in_empty_vec() {
     TVector<int> vec1;
     randomize(vec1);
 
-    if (vec1.size() != 0 || vec1.capacity() != 0) {
+    if (vec1.size() != 0 || vec1.capacity() != 15) {
         return false;
     }
     return true;
@@ -1273,12 +1261,19 @@ bool test_97_find_elems_after_pop_elem() {
 bool test_98_emplace_after_erase_elem() {
     int arr[20] = { 1, 2, 3, 4, 1, 6, 7, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
     TVector<int> vec1(arr, 20);
-    vec1.erase_elems(5, 2);
-    vec1.emplace(5, 111);
-    int expected_result[18] = { 1, 2, 3, 4, 111, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
+    vec1.erase_elems(4, 2);
+    vec1.emplace(3, 111);
+    int expected_result[18] = { 1, 2, 3, 111, 7, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
     TVector<int> vec2(expected_result, 18);
+    vec1.print_elems();
     
     return (vec1 == vec2);
+    /*for (size_t i = 0; i < 18; i++) {
+        if (vec1[i] != expected_result[i]) {
+            return false;
+        }
+    }
+    return true;*/
 }
 bool test_99_push_front_elem_after_pop_front_elem() {
     int arr[20] = { 1, 2, 3, 4, 1, 6, 7, 8, 9, 10, 11, 12, 1, 14, 15, 18, 1, 21, 11, 1 };
@@ -1349,6 +1344,67 @@ bool test_103_hoara_sort_after_erase_elem() {
         }
     }
     return true;
+}
+bool test_104_push_back_after_erase_elems() {
+    int arr[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    int expected_result[13] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 111 };
+    TVector<int> vec1(arr, 14), vec2(expected_result, 13);
+    vec1.erase_elems(13, 2);
+    vec1.push_back_elem(111);
+    vec1.print_elems();
+    for (int i = 0; i < 13; i++) {
+        if (vec1[i] != vec2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+bool test_105_push_back_elems_in_empty_vec_string() {
+    {
+        TVector<std::string> vec;
+        std::string items[3] = { "a", "b", "c" };
+        vec.push_back_elems(items, 3);
+
+        for (size_t i = 0; i < 3; i++) {
+            if (vec[i] != items[i]) return false;
+        }
+    }
+    return true;
+}
+bool test_erase_mixed_no_reallocation() {
+    const size_t INIT_SIZE = 100;
+    TVector<int> vec;
+
+    // 1. Заполнение вектора
+    for (int i = 0; i < INIT_SIZE; ++i) {
+        vec.push_back_elem(i);
+    }
+
+    // 2. Удаление каждого второго элемента (с учётом сдвига)
+    for (size_t i = 0; i < vec.size(); ) {  // Без инкремента в for!
+        vec.erase_elems(i, 1);  // Удаляем текущий элемент
+        i += 1;  // Перескакиваем через следующий элемент
+    }
+
+    // 3. Проверка
+    if (vec.size() != INIT_SIZE / 2) {
+        return false;
+    }
+
+    // Теперь оставшиеся элементы: 1, 3, 5,... (индексы 0,1,2,... в уменьшенном векторе)
+    for (size_t i = 0; i < vec.size(); ++i) {
+        if (vec[i] != static_cast<int>(2 * i + 1)) {
+            return false;
+        }
+    }
+
+    // 4. Удаление в обратном порядке (теперь безопасно)
+    while (!vec.is_empty()) {
+        vec.erase_elems(vec.size() - 1, 1);
+    }
+
+    // 5. Финальная проверка
+    return vec.is_empty();
 }
 int main() {
     TestSystem::print_init_info();
@@ -1465,13 +1521,16 @@ int main() {
     TestSystem::start_test(test_95_pop_back_elem_after_emplace_elem, "TVector.test_95_pop_back_elem_after_emplace_elem");
     TestSystem::start_test(test_96_erase_elem_after_emplace_elem, "TVector.test_96_erase_elem_after_emplace_elem");
     TestSystem::start_test(test_97_find_elems_after_pop_elem, "TVector.test_97_find_elems_after_pop_elem");
-    //TestSystem::start_test(test_98_emplace_after_erase_elem, "TVector.test_98_emplace_after_erase_elem");
+    TestSystem::start_test(test_98_emplace_after_erase_elem, "TVector.test_98_emplace_after_erase_elem");
     TestSystem::start_test(test_99_push_front_elem_after_pop_front_elem, "TVector.test_99_push_front_elem_after_pop_front_elem");
     TestSystem::start_test(test_100_find_elems_after_emplace, "TVector.test_100_find_elems_after_emplace");
     
     TestSystem::start_test(test_101_accessing_an_elem_using_an_iterator, "TVector.test_101_accessing_an_elem_using_an_iterator");
     TestSystem::start_test(test_102_hoara_sort, "TVector.test_102_hoara_sort");
     TestSystem::start_test(test_103_hoara_sort_after_erase_elem, "TVector.test_103_hoara_sort_after_erase_elem");
+    TestSystem::start_test(test_104_push_back_after_erase_elems, "TVector.test_104_push_back_after_erase_elems");
+    TestSystem::start_test(test_105_push_back_elems_in_empty_vec_string, "TVector.test_105_push_back_elems_in_empty_vec_string");
+    TestSystem::start_test(test_erase_mixed_no_reallocation, "TVector.test_erase_mixed_no_reallocation");
 
     TestSystem::print_final_info();
 
